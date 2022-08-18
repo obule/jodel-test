@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "lib": ["es2017"],
+    "noImplicitAny": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "strict": true,
+    "target": "ES6",
+    "module": "CommonJS",
+    "outDir": "dist",
+    "rootDir": "./",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "types/*": ["@types/*", "node"],
+      "~tests/*": ["tests/*"]
+    }
+  },
+  "include": ["./**/*.ts", "@types/*.d.ts"],
+  "exclude": ["node_modules/**/*", ".webpack/**/*", "_warmup/**/*", ".vscode/**/*"],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  }
+}

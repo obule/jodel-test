@@ -1,0 +1,13 @@
+# package directories
+node_modules
+jspm_packages
+
+# typescript
+dist
+
+# Mac Gabbbage
+.DS_Store
+
+# Serverless directories
+.webpack
+.env.production
