@@ -48,7 +48,7 @@ describe('Survey Endpoint', () => {
             },
           ],
         });
-      expect(response.body).toEqual({
+      expect(response.body.data).toEqual({
         ...SURVEY_DATA,
         createdAt: SURVEY_DATA.createdAt.toISOString(),
       });

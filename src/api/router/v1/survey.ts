@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 
 import { createSurveyValidator } from '@/api/input/validator';
+import { apiResponse } from '@/api/util';
 import { CreateSurveyVars } from '@/contracts/service/survey';
 import { getSurveyService } from '@/ioc/provider';
 import { StatusCode } from '@/utils/errors';
@@ -12,9 +13,11 @@ router.post('/', [...createSurveyValidator()], (req: Request, res: Response) => 
     const { name, questions, description } = req.body as CreateSurveyVars;
     const surveyService = getSurveyService();
     const response = surveyService.create({ name, questions, description });
-    res.status(StatusCode.Success).send(response);
+    res
+      .status(StatusCode.Success)
+      .send(apiResponse({ message: 'Survey created', success: true, data: response }));
   } catch (error) {
-    res.status(StatusCode.InternalServerError).send(error);
+    res.status(StatusCode.InternalServerError).send({ message: error, success: false, data: null });
   }
 });
 

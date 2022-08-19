@@ -35,7 +35,7 @@ describe('Create answer Endpoint', () => {
           surveyId: faker.datatype.uuid(),
           answer: [faker.datatype.string()],
         });
-      expect(response.body).toEqual({
+      expect(response.body.data).toEqual({
         ...ANSWER_DATA,
         createdAt: ANSWER_DATA.createdAt.toISOString(),
       });
@@ -56,7 +56,7 @@ describe('Fetch answer', () => {
     it('succeeds', async () => {
       const response = await request(app).get(`${BASE_ENDPOINT}/${faker.datatype.uuid()}`);
       expect(response.statusCode).toBe(StatusCode.Success);
-      expect(response.body).toEqual([
+      expect(response.body.data).toEqual([
         {
           ...ANSWER_DATA,
           createdAt: ANSWER_DATA.createdAt.toISOString(),
