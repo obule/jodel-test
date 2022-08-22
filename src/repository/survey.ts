@@ -6,13 +6,14 @@ import {
   Survey,
   SurveyRepository,
 } from '@/contracts/repository/survey';
+import { EntityNotFoundError } from '@/utils/errors';
 
 export const SurveyDataStore: Record<string, QuestionEntity[]> = {};
 
 export class SQLSurveyRepository implements SurveyRepository {
   public findByIdOrFail(surveyId: string): QuestionEntity[] {
     const questions = SurveyDataStore[surveyId];
-    if (!questions) throw new Error(`cannot find survey with id ${surveyId}`);
+    if (!questions) throw new EntityNotFoundError(`Cannnot find survey with id ${surveyId}`);
 
     return questions;
   }

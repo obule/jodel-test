@@ -50,7 +50,7 @@ module.exports = {
   },
   settings: {
     'import/resolver': {
-      node: {}, // placed above other resolver configs
+      node: {},
       webpack: 'webpack.config.js',
     },
   },

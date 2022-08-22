@@ -4,20 +4,31 @@ import { answerQueryPathValidator, createAnswerValidator } from '@/api/input/val
 import { apiResponse } from '@/api/util';
 import { CreateAnswerVars, FindAllAnswerArgs } from '@/contracts/service/answer';
 import { getAnswerService } from '@/ioc/provider';
-import { StatusCode } from '@/utils/errors';
+import { EntityNotFoundError, StatusCode } from '@/utils/errors';
 
 const router = express.Router();
 
 router.post('/', [...createAnswerValidator()], (req: Request, res: Response) => {
   try {
-    const { answer, questionId, surveyId } = req.body as CreateAnswerVars;
+    const createVars = req.body as CreateAnswerVars;
     const answerService = getAnswerService();
-    const response = answerService.create({ answer, questionId, surveyId });
-    res
+    const response = answerService.create(createVars);
+    if (!response)
+      return res
+        .status(StatusCode.NotFound)
+        .json(apiResponse({ data: null, message: 'Survey not found.', success: false }));
+
+    return res
       .status(StatusCode.Success)
-      .send(apiResponse({ message: 'Answer created', data: response, success: true }));
+      .json(apiResponse({ message: 'Answer created', data: response, success: true }));
   } catch (error) {
-    res.status(StatusCode.InternalServerError).send({ message: error, data: null, success: false });
+    if (error instanceof EntityNotFoundError)
+      return res
+        .status(StatusCode.NotFound)
+        .json(apiResponse({ message: error.message, data: null, success: false }));
+    return res
+      .status(StatusCode.InternalServerError)
+      .json(apiResponse({ message: 'Internal Server error', data: null, success: false }));
   }
 });
 
@@ -28,9 +39,9 @@ router.get('/:surveyId', [...answerQueryPathValidator()], (req: Request, res: Re
     const response = answerService.findAll({ surveyId });
     res
       .status(StatusCode.Success)
-      .send({ message: 'Answer fetched!', data: response, success: true });
+      .json({ message: 'Answer fetched!', data: response, success: true });
   } catch (error) {
-    res.status(StatusCode.InternalServerError).send({ message: error, data: null, success: false });
+    res.status(StatusCode.InternalServerError).json({ message: error, data: null, success: false });
   }
 });
 

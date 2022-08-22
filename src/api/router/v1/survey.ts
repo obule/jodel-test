@@ -15,9 +15,9 @@ router.post('/', [...createSurveyValidator()], (req: Request, res: Response) => 
     const response = surveyService.create({ name, questions, description });
     res
       .status(StatusCode.Success)
-      .send(apiResponse({ message: 'Survey created', success: true, data: response }));
+      .json(apiResponse({ message: 'Survey created', success: true, data: response }));
   } catch (error) {
-    res.status(StatusCode.InternalServerError).send({ message: error, success: false, data: null });
+    res.status(StatusCode.InternalServerError).json({ message: error, success: false, data: null });
   }
 });
 

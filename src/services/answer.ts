@@ -1,11 +1,7 @@
-import {
-  Answer,
-  AnswerRepository,
-  CreateAnswerVars,
-  FindAllAnswerArgs,
-} from '@/contracts/repository/answer';
+import { Answer, AnswerRepository } from '@/contracts/repository/answer';
 import { SurveyRepository } from '@/contracts/repository/survey';
-import { AnswerService } from '@/contracts/service/answer';
+import { AnswerService, CreateAnswerVars, FindAllAnswerArgs } from '@/contracts/service/answer';
+import { EntityNotFoundError } from '@/utils/errors';
 
 export class AuthorizingAnswerService implements AnswerService {
   public constructor(
@@ -17,15 +13,20 @@ export class AuthorizingAnswerService implements AnswerService {
     return this.answerRepository.findAll(args);
   }
 
-  public create(vars: CreateAnswerVars): Answer {
+  public create(vars: CreateAnswerVars): Answer[] | undefined {
     this.validateInput(vars);
-    return this.answerRepository.create(vars);
+    return this.answerRepository.create(vars.surveyId, vars.answers);
   }
 
   private validateInput(vars: CreateAnswerVars): void {
-    const { surveyId, questionId } = vars;
+    const { surveyId, answers } = vars;
     const foundQuestions = this.surveyRepository.findByIdOrFail(surveyId);
-    const foundQuestion = foundQuestions.find((question) => question.id === questionId);
-    if (!foundQuestion) throw new Error(`Question with ${questionId} does not exist`);
+
+    const uniqueQuestionIds = [...new Set(answers.map((answer) => answer.questionId))];
+    const unknownIds = uniqueQuestionIds.filter(
+      (questionId) => !foundQuestions.some((question) => question.id === questionId),
+    );
+    if (unknownIds.length > 0)
+      throw new EntityNotFoundError(`Cannot find questions with ids ${unknownIds.join(',')}`);
   }
 }

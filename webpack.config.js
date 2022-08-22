@@ -3,7 +3,6 @@ const path = require('path');
 
 const exclude = [
   /node_modules/,
-  path.resolve(__dirname, '.serverless'),
   path.resolve(__dirname, '.webpack'),
   path.resolve(__dirname, '.build'),
   path.resolve(__dirname, 'tests'),

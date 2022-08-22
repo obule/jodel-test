@@ -37,8 +37,8 @@ class StubAnswerService implements AnswerService {
     return [ANSWER_DATA];
   }
 
-  public create(): Answer {
-    return ANSWER_DATA;
+  public create(): Answer[] {
+    return [ANSWER_DATA];
   }
 }
 

@@ -8,6 +8,5 @@ dist
 # Mac Gabbbage
 .DS_Store
 
-# Serverless directories
 .webpack
 .env.production

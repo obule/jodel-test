@@ -3,13 +3,14 @@
 import { faker } from '@faker-js/faker';
 import { mock } from 'jest-mock-extended';
 
+import { AnswerRepository } from '@/contracts/repository/answer';
 import { QuestionType, SurveyRepository } from '@/contracts/repository/survey';
-import { AnswerService, FindAllAnswerArgs } from '@/contracts/service/answer';
+import { FindAllAnswerArgs } from '@/contracts/service/answer';
 import { AuthorizingAnswerService } from '@/services/answer';
 import { ANSWER_DATA } from '~tests/helper/data/answer';
 
 describe('AuthorizingAnswerService', () => {
-  const answerRepositoryMock = mock<AnswerService>();
+  const answerRepositoryMock = mock<AnswerRepository>();
   const surveyRepoMock = mock<SurveyRepository>();
   const service = new AuthorizingAnswerService(answerRepositoryMock, surveyRepoMock);
 
@@ -31,7 +32,7 @@ describe('AuthorizingAnswerService', () => {
           surveyRepoMock.findByIdOrFail.calledWith(surveyId).mockImplementation(() => {
             throw new Error();
           });
-          service.create({ answer: [], questionId: faker.datatype.uuid(), surveyId });
+          service.create({ answers: [], surveyId });
           throw Error(); // Never reaches here
         } catch (error) {}
       });
@@ -42,7 +43,7 @@ describe('AuthorizingAnswerService', () => {
         it('fails', () => {
           try {
             surveyRepoMock.findByIdOrFail.mockReturnValue([]);
-            service.create({ answer: [], questionId: faker.datatype.uuid(), surveyId });
+            service.create({ answers: [], surveyId });
             throw Error(); // Should never reach here
           } catch (error) {}
         });
@@ -60,9 +61,9 @@ describe('AuthorizingAnswerService', () => {
               questionType: QuestionType.Boolean,
             },
           ]);
-          const vars = { answer: [], questionId, surveyId };
+          const vars = { answers: [], surveyId };
           service.create(vars);
-          expect(answerRepositoryMock.create).toHaveBeenCalledWith(vars);
+          expect(answerRepositoryMock.create).toHaveBeenCalledWith(surveyId, vars.answers);
         });
       });
     });

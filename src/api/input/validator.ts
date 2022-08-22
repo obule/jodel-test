@@ -36,9 +36,10 @@ export function createSurveyValidator(): RequestHandler[] {
 
 export function createAnswerValidator(): RequestHandler[] {
   return [
-    body('answer').isArray().notEmpty(),
-    body('questionId').isUUID('4').notEmpty(),
-    body('surveyId').isUUID('4').notEmpty(),
+    body('answers').isArray().notEmpty(),
+    body('answers.*.questionId').isUUID().notEmpty().withMessage('Provide a valid UUID'),
+    body('answers.*.answer').isArray().notEmpty(),
+    body('surveyId').isUUID('4').notEmpty().withMessage('Provide a valid UUID'),
     parameterValidationMiddleware(),
   ];
 }

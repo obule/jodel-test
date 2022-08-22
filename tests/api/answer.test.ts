@@ -18,9 +18,8 @@ describe('Create answer Endpoint', () => {
       const response = await request(app)
         .post(`${BASE_ENDPOINT}`)
         .send({
-          questionId: faker.datatype.string(), // Should be UUID
-          surveyId: faker.datatype.uuid(),
-          answer: [faker.datatype.string()],
+          surveyId: faker.datatype.string(), // Should be UUID
+          answers: [{ answer: [faker.datatype.string()], questionId: faker.datatype.uuid() }],
         });
       expect(response.statusCode).toBe(StatusCode.BadRequest);
     });
@@ -31,14 +30,15 @@ describe('Create answer Endpoint', () => {
       const response = await request(app)
         .post(`${BASE_ENDPOINT}`)
         .send({
-          questionId: faker.datatype.uuid(),
           surveyId: faker.datatype.uuid(),
-          answer: [faker.datatype.string()],
+          answers: [{ answer: [faker.datatype.string()], questionId: faker.datatype.uuid() }],
         });
-      expect(response.body.data).toEqual({
-        ...ANSWER_DATA,
-        createdAt: ANSWER_DATA.createdAt.toISOString(),
-      });
+      expect(response.body.data).toEqual([
+        {
+          ...ANSWER_DATA,
+          createdAt: ANSWER_DATA.createdAt.toISOString(),
+        },
+      ]);
       expect(response.statusCode).toBe(StatusCode.Success);
     });
   });

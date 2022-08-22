@@ -14,9 +14,7 @@ export enum ErrorCode {
 }
 
 export class EntityNotFoundError extends Error {
-  public constructor(entityName: string, id?: unknown) {
-    const idPart = id === undefined ? '' : `${id}`;
-    const message = `The given ID "${idPart}" does not belong to a ${entityName}.`;
+  public constructor(message: string) {
     super(message);
 
     Object.defineProperty(this, 'name', { value: 'EntityNotFoundError' });

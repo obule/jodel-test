@@ -1,4 +1,4 @@
-# SURVEY
+# JODEL TEST
 
 ## Introduction
 
@@ -37,13 +37,13 @@ $ cd into the base directory
 $ npm install
 
 # Create .env file for environmental variables in your root directory and add variable for PORT
-PORT=5000
+PORT=3000
 
 
 # Run the app
 $ npm run start
 
-# Check the port on the specified port on the env or 5000
+# Check the port on the specified port on the env or 3000
 
 
 # Run test
@@ -93,9 +93,8 @@ Error Response: {
 - /api/v1/answer # Answer a question
 Method: POST
 Body: {
-  questionId: string,
   surveyId: string,
-  answer: string[],
+  answers: { questionId: string, answer: string[]}[]
 }
 Success Response: {
   success: true,

@@ -8,7 +8,6 @@ export type Answer = {
 
 export type CreateAnswerVars = {
   questionId: string;
-  surveyId: string;
   answer: string[];
 };
 
@@ -18,5 +17,5 @@ export type FindAllAnswerArgs = {
 
 export interface AnswerRepository {
   findAll(args: FindAllAnswerArgs): Answer[];
-  create(vars: CreateAnswerVars): Answer;
+  create(surveyId: string, vars: CreateAnswerVars[]): Answer[];
 }
