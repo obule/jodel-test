@@ -49,6 +49,26 @@ describe('SQLAnswerRepository', () => {
         expect(firstCall.id).toBe(secondCall.id);
       });
     });
+
+    describe('without duplicate answer', () => {
+      it('adds the answer to the existing survey', () => {
+        const [firstCall] = repository.create(surveyId, [createVars]);
+        // Call 2
+        const [secondCall] = repository.create(surveyId, [
+          { ...createVars, questionId: faker.datatype.uuid() },
+        ]);
+        const dataStoreAnswer = AnswerDataStore[surveyId];
+        expect(dataStoreAnswer).toHaveLength(2);
+        const foundFirstCallQuestion = dataStoreAnswer.find(
+          (answer) => answer.questionId === firstCall.questionId,
+        );
+        const foundSecondCallQuestion = dataStoreAnswer.find(
+          (answer) => answer.questionId === secondCall.questionId,
+        );
+        expect(foundFirstCallQuestion).toBeDefined();
+        expect(foundSecondCallQuestion).toBeDefined();
+      });
+    });
   });
 
   describe('.findAll', () => {

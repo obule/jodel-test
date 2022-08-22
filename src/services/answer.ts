@@ -13,7 +13,7 @@ export class AuthorizingAnswerService implements AnswerService {
     return this.answerRepository.findAll(args);
   }
 
-  public create(vars: CreateAnswerVars): Answer[] | undefined {
+  public create(vars: CreateAnswerVars): Answer[] {
     this.validateInput(vars);
     return this.answerRepository.create(vars.surveyId, vars.answers);
   }

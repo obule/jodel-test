@@ -9,8 +9,6 @@ import {
 
 export const AnswerDataStore: Record<string, Answer[]> = {};
 
-type QuestionAnswerMap = Record<string, Answer>;
-
 export class SQLAnswerRepository implements AnswerRepository {
   public findAll(args: FindAllAnswerArgs): Answer[] {
     const { surveyId } = args;
@@ -42,15 +40,8 @@ export class SQLAnswerRepository implements AnswerRepository {
   }
 
   private ensureNoDuplicates(surveyId: string, vars: CreateAnswerVars[]): Answer[] {
-    const questionAnswerMap: QuestionAnswerMap = {};
     const surveyAnswers = AnswerDataStore[surveyId];
-
-    // Check for duplicates and update
-    surveyAnswers.forEach((answer) => {
-      questionAnswerMap[answer.questionId] = answer;
-    });
     const answers: Answer[] = [];
-
     vars.forEach((currentVar) => {
       const foundIndex = surveyAnswers.findIndex(
         (answer) => answer.questionId === currentVar.questionId,

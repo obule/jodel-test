@@ -14,5 +14,5 @@ export type FindAllAnswerArgs = RepoFindAllAnswerArgs;
 
 export interface AnswerService {
   findAll(args: FindAllAnswerArgs): Answer[];
-  create(vars: CreateAnswerVars): Answer[] | undefined;
+  create(vars: CreateAnswerVars): Answer[];
 }
